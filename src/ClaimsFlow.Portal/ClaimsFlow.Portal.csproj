@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <UserSecretsId>claimsflow-portal-2021</UserSecretsId>
+    <!-- Deployed self-contained: App Service no longer offers a .NET 6 stack,
+         so the app carries its own runtime. -->
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Deprecated Azure SDKs. Modern replacements exist; nobody has moved. -->
+    <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.8" />
+    <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.2.3" />
+    <PackageReference Include="Microsoft.Azure.Storage.Queue" Version="11.2.3" />
+    <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
+    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.6.2" />
+    <!-- Pinned years ago to stop Microsoft.Azure.Cosmos.Table's transitive graph
+         from failing the restore with NU1605. Goes away with the deprecated SDK. -->
+    <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
+
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.27" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.27" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ClaimsFlow.Portal.Contracts\ClaimsFlow.Portal.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

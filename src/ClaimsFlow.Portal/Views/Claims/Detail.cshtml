@@ -1,0 +1,33 @@
+@model ClaimView
+@{
+    ViewData["Title"] = "Claim " + Model.ClaimId;
+}
+
+<h2>Claim @Model.ClaimId</h2>
+<p><a asp-action="Index" asp-route-partnerId="@Model.PartnerId">&larr; back to @Model.PartnerId</a></p>
+
+<dl>
+    <dt>Partner</dt><dd>@Model.PartnerId (@Model.Region)</dd>
+    <dt>Policy</dt><dd>@Model.PolicyNumber</dd>
+    <dt>Amount</dt><dd>@Model.AmountClaimed.ToString("N2") @Model.Currency</dd>
+    <dt>Risk score</dt><dd class="@(Model.RiskScore >= 80 ? "risk-high" : null)">@Model.RiskScore</dd>
+    <dt>Status</dt><dd>@Model.Status</dd>
+    <dt>Decision</dt><dd>@(Model.Decision ?? "not decided")</dd>
+    <dt>Correlation id</dt><dd>@Model.CorrelationId</dd>
+    <dt>Submitted</dt><dd>@Model.SubmittedAt.ToString("u")</dd>
+    <dt>Review deadline</dt><dd>@Model.ManualReviewDeadline.ToString("u")</dd>
+</dl>
+
+<p class="actions">
+    <a asp-action="Document" asp-route-partnerId="@Model.PartnerId" asp-route-id="@Model.ClaimId">Download source document</a>
+</p>
+
+@if (Model.Decision == null)
+{
+    <form asp-action="Decide" method="post">
+        <input type="hidden" name="partnerId" value="@Model.PartnerId" />
+        <input type="hidden" name="id" value="@Model.ClaimId" />
+        <button type="submit" name="decision" value="@ClaimStatuses.Approved">Approve</button>
+        <button type="submit" name="decision" value="@ClaimStatuses.Rejected">Reject</button>
+    </form>
+}

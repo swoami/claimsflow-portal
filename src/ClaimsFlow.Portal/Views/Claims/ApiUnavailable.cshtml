@@ -1,0 +1,11 @@
+@model ClaimView
+@{
+    ViewData["Title"] = "Claims API unavailable";
+}
+
+<h2>Claims API unavailable</h2>
+<p>
+    Could not reach the claims API for claim <strong>@Model.ClaimId</strong>
+    (partner @Model.PartnerId). Check <code>ClaimsApi:BaseUrl</code> and the function key.
+</p>
+<p><a asp-action="Index" asp-route-partnerId="@Model.PartnerId">Back to the claim list</a></p>

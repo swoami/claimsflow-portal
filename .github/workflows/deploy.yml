@@ -1,0 +1,67 @@
+# BASELINE workflow, pinned to .NET 6 — a runtime that went out of support on
+# 12 November 2024. Part of the migration surface: an upgrade that changes only
+# the code and leaves this file alone produces a green build and a broken deploy.
+name: Build and deploy claimsflow-portal
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '6.0.x'
+  PROJECT_PATH: src/ClaimsFlow.Portal/ClaimsFlow.Portal.csproj
+  # App Service no longer offers a .NET 6 stack, so the app ships its own runtime.
+  RUNTIME_ID: win-x86
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        run: dotnet restore ClaimsFlow.Portal.sln
+
+      - name: Build
+        run: dotnet build ClaimsFlow.Portal.sln -c Release --no-restore
+
+      - name: Test
+        run: dotnet test ClaimsFlow.Portal.sln -c Release --no-build
+
+      - name: Publish (self-contained)
+        run: >
+          dotnet publish ${{ env.PROJECT_PATH }} -c Release -o ./publish
+          -r ${{ env.RUNTIME_ID }} --self-contained true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: portal
+          path: ./publish
+
+  deploy:
+    needs: build
+    runs-on: windows-latest
+    environment: production
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: portal
+          path: ./publish
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # No staging slot on the baseline plan: this goes straight to production.
+      - name: Deploy to App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ vars.WEB_APP_NAME }}
+          package: ./publish

@@ -1,0 +1,17 @@
+:root { color-scheme: light; }
+body { font-family: Segoe UI, system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #1b1f24; }
+header { background: #12324f; color: #fff; padding: 16px 24px; }
+header h1 { margin: 0; font-size: 20px; font-weight: 600; }
+header .sub { font-weight: 400; opacity: .75; }
+header .stack { margin: 4px 0 0; font-size: 12px; opacity: .7; }
+main { padding: 24px; }
+table { border-collapse: collapse; width: 100%; background: #fff; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #e3e6ea; font-size: 14px; }
+th { background: #eef1f4; font-weight: 600; }
+.notice { background: #e7f5ec; border: 1px solid #b7dcc4; padding: 10px 14px; border-radius: 4px; }
+.risk-high { color: #a3231b; font-weight: 600; }
+.actions form { display: inline; }
+button { font: inherit; padding: 4px 10px; cursor: pointer; }
+a { color: #12324f; }
+dl { background: #fff; padding: 16px; }
+dt { font-weight: 600; margin-top: 8px; }
