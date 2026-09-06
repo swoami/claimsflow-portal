@@ -2,6 +2,9 @@
 
 Operator console for ClaimsFlow. **ASP.NET Core 6.0 MVC**, hosted on Azure App Service.
 
+Paired with **[claimsflow-functions](https://github.com/swoami/claimsflow-functions)** — the two repositories are joined by Azure
+Storage queues, blobs and tables, and are assessed together as one application.
+
 > This repository is a demo baseline for GitHub Copilot modernization. Every
 > deprecated package and dated pattern here is deliberate. Do not modernize it
 > ahead of the demo.
@@ -22,11 +25,11 @@ Operator console for ClaimsFlow. **ASP.NET Core 6.0 MVC**, hosted on Azure App S
 | Route | Purpose |
 |---|---|
 | `GET /Claims/Index?partnerId=` | Lists claims from the `claims` table |
-| `GET /Claims/Detail/{id}` | Reads one claim from the **claimsflow-functions** HTTP API |
+| `GET /Claims/Detail/{id}` | Reads one claim from the **[claimsflow-functions](https://github.com/swoami/claimsflow-functions)** HTTP API |
 | `GET /Claims/Document/{id}` | Downloads the original document from Blob storage |
 | `POST /Claims/Decide` | Publishes an operator decision to the `fraud-decision` queue |
 
-## Contracts owned jointly with claimsflow-functions
+## Contracts owned jointly with [claimsflow-functions](https://github.com/swoami/claimsflow-functions)
 
 - Queue `fraud-decision` — JSON shape **and base64 encoding**. `CloudQueue.EncodeMessage`
   defaults to `true`; `Azure.Storage.Queues` v12 does not encode at all. Porting
@@ -47,7 +50,7 @@ dotnet test  ClaimsFlow.Portal.sln
 ## Run locally
 
 Requires [Azurite](https://learn.microsoft.com/azure/storage/common/storage-use-azurite)
-and the claimsflow-functions app running on `ClaimsApi:BaseUrl`.
+and the [claimsflow-functions](https://github.com/swoami/claimsflow-functions) app running on `ClaimsApi:BaseUrl`.
 
 ```bash
 dotnet run --project src/ClaimsFlow.Portal
